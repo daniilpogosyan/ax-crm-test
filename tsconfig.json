@@ -16,6 +16,11 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@libs/prisma": ["src/libs/prisma/index.ts"],
+      "@common/*": ["src/common/*"]
+      // "@libs/avatar": ["src/libs/avatar/src/index.ts"],
+    }
   }
 }
