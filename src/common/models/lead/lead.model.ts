@@ -5,13 +5,7 @@ import {
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
-import {
-  CityModel,
-  ColorModel,
-  CountryModel,
-  LanguageModel,
-  NationalityModel,
-} from '../';
+import { CityModel, CountryModel, LanguageModel, NationalityModel } from '../';
 
 enum LeadType {
   Offplan,
@@ -26,9 +20,6 @@ registerEnumType(LeadType, {
 export class LeadModel {
   @Field(() => Int)
   id!: number;
-
-  // @Field(() => ItemType)
-  // itemType: ItemType;
 
   @Field(() => String, { nullable: true })
   displayName: string;
@@ -57,20 +48,17 @@ export class LeadModel {
   // @Field(() => FileModel, { nullable: true })
   // avatar: FileMode;
 
-  @Field(() => ColorModel)
-  color: ColorModel;
+  // @Field(() => CityModel, { nullable: true })
+  // city: CityModel;
 
-  @Field(() => CityModel, { nullable: true })
-  city: CityModel;
+  // @Field(() => CountryModel, { nullable: true })
+  // country: CountryModel;
 
-  @Field(() => CountryModel, { nullable: true })
-  country: CountryModel;
+  // @Field(() => [LanguageModel], { nullable: true })
+  // languages: LanguageModel[];
 
-  @Field(() => [LanguageModel], { nullable: true })
-  languages: LanguageModel[];
-
-  @Field(() => NationalityModel, { nullable: true })
-  nationality: NationalityModel;
+  // @Field(() => NationalityModel, { nullable: true })
+  // nationality: NationalityModel;
 
   // @Field(() => LeadIntentionModel, { nullable: true })
   // intention: LeadIntentionModel;
@@ -86,31 +74,4 @@ export class LeadModel {
 
   @Field(() => Date, { nullable: true })
   updatedAt: Date;
-}
-
-@ObjectType()
-export class GeneralInfo {
-  @Field(() => LeadType)
-  leadType: LeadType;
-
-  @Field(() => Int)
-  id: number;
-
-  @Field()
-  country: string;
-
-  @Field()
-  city: string;
-
-  @Field()
-  language: string;
-
-  @Field()
-  nationality: string;
-
-  @Field()
-  birthday: Date;
-
-  @Field()
-  propertyType: string;
 }

@@ -11,7 +11,9 @@ export interface IResolverParamsNullableType<T> {
   params?: T;
 }
 
-export function ResolverParams<T>(classRef: Type<T> | Array<any>): Type<IResolverParamsType<T>> {
+export function ResolverParams<T>(
+  classRef: Type<T> | Array<any>,
+): Type<IResolverParamsType<T>> {
   @ArgsType()
   abstract class ResolverParamsType implements IResolverParamsType<T> {
     @TransformerType(() => (Array.isArray(classRef) ? classRef[0] : classRef))

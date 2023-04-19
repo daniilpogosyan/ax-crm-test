@@ -9,15 +9,6 @@ export class CityModel {
   @Field(() => String)
   title!: string;
 
-  @Field(() => String)
-  timezone!: string;
-
-  @Field(() => String)
-  offset!: string;
-
-  @Field(() => Int)
-  offsetMs!: number;
-
   @Field(() => CountryModel)
   country!: CountryModel;
 
