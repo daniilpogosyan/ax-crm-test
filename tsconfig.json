@@ -6,6 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
@@ -18,7 +19,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@libs/prisma": ["src/libs/prisma/index.ts"],
+      "@libs/prisma": ["src/libs/prisma/index"],
       "@common/*": ["src/common/*"]
       // "@libs/avatar": ["src/libs/avatar/src/index.ts"],
     }
