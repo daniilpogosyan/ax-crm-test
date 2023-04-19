@@ -7,7 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Person {
+  id Int @id() @default(autoincrement())
+
+  displayName String
+  firstName   String?
+  secondName  String?
+  lastName    String?
+  birthDate   DateTime?
+
+  // avatar   File @relation(fields: [avatarId], references: [id])
+  // avatarId Int
+
+  intentions Lead[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 model Lead {
+  person    Person     @relation(fields: [personId], references: [id])
+  personId  Int
   id        Int        @id @default(autoincrement())
   seen      Boolean    @default(false)
   budget    Float?
@@ -101,8 +120,6 @@ model Tag {
   updatedAt     DateTime     @updatedAt
   Lead          Lead?        @relation(fields: [leadId], references: [id])
   leadId        Int?
-
-  @@index(fields: [type])
 }
 
 model Country {
