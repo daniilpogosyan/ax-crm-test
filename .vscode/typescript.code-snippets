@@ -1,0 +1,161 @@
+{
+  "Console.log": {
+    "prefix": "clg",
+    "body": ["console.log(`L${TM_LINE_NUMBER}`, $0);"],
+    "description": "Console.log"
+  },
+  "Console.log as JSON": {
+    "prefix": "clj",
+    "body": ["console.log(`L${TM_LINE_NUMBER}`, JSON.stringify($0, undefined, 2));"],
+    "description": "Console.log as JSON"
+  },
+  "Console.log with var name": {
+    "prefix": "clo",
+    "body": ["console.log(`L${TM_LINE_NUMBER} $object:`, $object);"],
+    "description": "Console.log with var name"
+  },
+  "Log Here text": {
+    "prefix": "chere",
+    "body": ["console.log('L${TM_LINE_NUMBER} Here');"],
+    "description": "Log Here text"
+  },
+  "Measure time": {
+    "prefix": "cTime",
+    "body": ["console.time('$0');"],
+    "description": "Measure time"
+  },
+  "Measure time end": {
+    "prefix": "cTimeEnd",
+    "body": ["console.timeEnd('$0');"],
+    "description": "Measure time end"
+  },
+  "Nest Module": {
+    "prefix": "nModule",
+    "body": [
+      "import { Module } from '@nestjs/common';",
+      "import { ${1:name}Repository } from './${1/(.*)/${1:/downcase}/}.repository';",
+      "import { ${1:name}Consumer } from './${1/(.*)/${1:/downcase}/}.consumer';",
+      "",
+      "@Module({",
+      "  providers: [${1:name}Repository, ${1:name}Consumer],",
+      "  exports: [${1:name}Repository, ${1:name}Consumer],",
+      "})",
+      "export class ${1:name}Module {}",
+      "$0"
+    ],
+    "description": "Nest Module"
+  },
+  "Nest Resolver": {
+    "prefix": "nResolver",
+    "body": [
+      "import { Resolver } from '@nestjs/graphql';",
+      "import { ${1:name}Service } from './${1/^(.)/${1:/downcase}/}.service';",
+      "",
+      "@Resolver()",
+      "export class ${1:name}Resolver {",
+      "  constructor(private readonly ${1/^(.)/${1:/downcase}/}Service: ${1:name}Service) {}",
+      "}",
+      ""
+    ],
+    "description": "Nest Resolver"
+  },
+  "Nest Model Resolver": {
+    "prefix": "nModelResolver",
+    "body": [
+      "import { PrismaService } from '@libs/prisma';",
+      "import { Inject } from '@nestjs/common';",
+      "import { Resolver } from '@nestjs/graphql';",
+      "",
+      "@Resolver(() => ${1:name})",
+      "export class ${1:name}Resolver implements HasKeys<${1:name}, ParentType> {",
+      "  constructor(@Inject(PrismaService) private prisma: PrismaService) {}",
+      "}",
+      ""
+    ],
+    "description": "Nest Model Resolver"
+  },
+  "Nest Service": {
+    "prefix": "nService",
+    "body": [
+      "import { Inject, Injectable } from '@nestjs/common';",
+      "import { PrismaService } from '@libs/prisma';",
+      "",
+      "@Injectable()",
+      "export class ${1:name}Service {",
+      "  constructor(@Inject(PrismaService) private prisma: PrismaService) {}",
+      "}",
+      ""
+    ],
+    "description": "Nest Service"
+  },
+  "Nest Consumer": {
+    "prefix": "nConsumer",
+    "body": [
+      "import { ConsumerFor, ConsumerType } from '@libs/event-processor';",
+      "import { PrismaService } from '@libs/prisma';",
+      "import { Inject, Injectable } from '@nestjs/common';",
+      "import { ${1:name}Repository } from './repository/${1/(.*)/${1:/downcase}/}.repository';",
+      "",
+      "@Injectable()",
+      "@ConsumerFor(${1:name}Repository)",
+      "export class ${1:name}Consumer implements Partial<ConsumerType<${1:name}Repository>> {",
+      "  constructor(@Inject(PrismaService) private prisma: PrismaService) {}",
+      "}",
+      "$0"
+    ]
+  },
+  "Nest Repository": {
+    "prefix": "nRepo",
+    "body": [
+      "import { PrismaService } from '@libs/prisma';",
+      "import { Inject, Injectable } from '@nestjs/common';",
+      "",
+      "@Injectable()",
+      "export class ${1:name}Repository {",
+      "  constructor(@Inject(PrismaService) private prisma: PrismaService) {}",
+      "}",
+      "$0"
+    ]
+  },
+  "Nest Watchable Repository": {
+    "prefix": "nRepoW",
+    "body": [
+      "import { Watchable } from '@libs/event-processor';",
+      "import { PrismaService } from '@libs/prisma';",
+      "import { Inject, Injectable } from '@nestjs/common';",
+      "",
+      "@Watchable()",
+      "@Injectable()",
+      "export class ${1:name}Repository {",
+      "  constructor(@Inject(PrismaService) private prisma: PrismaService) {}",
+      "}",
+      "$0"
+    ]
+  },
+  "Nest GraphQL Mutation index file": {
+    "prefix": "ngMutation",
+    "body": [
+      "import { ${1:name}MutationResolver } from './${1/(.*)/${1:/downcase}/}.resolver';",
+      "import { ${1:name}MutationService } from './${1/(.*)/${1:/downcase}/}.service';",
+      "",
+      "export const ${1:name}MutationProviders = [${1:name}MutationResolver, ${1:name}MutationService];"
+    ]
+  },
+  "Nest GraphQL Query index file": {
+    "prefix": "ngQuery",
+    "body": [
+      "import { ${1:name}QueryResolver } from './${1/(.*)/${1:/downcase}/}.resolver';",
+      "import { ${1:name}QueryService } from './${1/(.*)/${1:/downcase}/}.service';",
+      "",
+      "export const ${1:name}QueryProviders = [${1:name}QueryResolver, ${1:name}QueryService];"
+    ]
+  },
+  "Inject dependency": {
+    "prefix": "inj",
+    "body": ["private readonly ${1:name}: ${1/^(.)/${1:/upcase}/},"]
+  },
+  "Inject dependency with decorator": {
+    "prefix": "injD",
+    "body": ["@Inject(${1/^(.)/${1:/upcase}/}) private ${1:name}: ${1/^(.)/${1:/upcase}/},"]
+  }
+}

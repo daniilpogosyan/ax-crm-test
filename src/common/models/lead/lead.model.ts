@@ -1,6 +1,17 @@
-import { Field, Float, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { ItemType } from '@prisma/client';
-import { CityModel, ColorModel, CountryModel, LanguageModel, NationalityModel } from '../';
+import {
+  Field,
+  Float,
+  Int,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
+import {
+  CityModel,
+  ColorModel,
+  CountryModel,
+  LanguageModel,
+  NationalityModel,
+} from '../';
 
 enum LeadType {
   Offplan,
@@ -16,8 +27,8 @@ export class LeadModel {
   @Field(() => Int)
   id!: number;
 
-  @Field(() => ItemType)
-  itemType: ItemType;
+  // @Field(() => ItemType)
+  // itemType: ItemType;
 
   @Field(() => String, { nullable: true })
   displayName: string;
