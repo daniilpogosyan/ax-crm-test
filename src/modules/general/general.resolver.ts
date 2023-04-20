@@ -4,33 +4,31 @@ import {
   LanguageModel,
   NationalityModel,
 } from '@common/models';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { Inject } from '@nestjs/common';
 import { Args, Int, Resolver, Query } from '@nestjs/graphql';
+import { GeneralService } from 'src/modules/general/general.service';
 
 @Resolver()
 export class GeneralResolver {
-  constructor(@Inject(PrismaService) private prisma: PrismaService) {}
+  constructor(@Inject(GeneralService) private generalService: GeneralService) {}
 
   @Query(() => [CountryModel])
   fetchCountries() {
-    return this.prisma.country.findMany();
+    return this.generalService.fetchCountries();
   }
 
   @Query(() => [CityModel])
   fetchCities(@Args({ name: 'countryId', type: () => Int }) countryId: number) {
-    return this.prisma.city.findMany({
-      where: { countryId },
-    });
+    return this.generalService.fetchCities(countryId);
   }
 
   @Query(() => [LanguageModel])
   fetchLanguages() {
-    return this.prisma.language.findMany();
+    return this.generalService.fetchLanguages();
   }
 
   @Query(() => [NationalityModel])
   fetchNationality() {
-    return this.prisma.nationality.findMany();
+    return this.generalService.fetchNationality();
   }
 }

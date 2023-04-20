@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Candidate {
+  id        Int      @id() @default(autoincrement())
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+}
+
 model Person {
   id Int @id() @default(autoincrement())
 
