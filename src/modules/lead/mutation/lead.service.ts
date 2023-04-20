@@ -17,16 +17,8 @@ export class LeadMutationService {
     //   this.prisma.animal.findMany(),
     // ]);
 
-    const hasPersonalInfo =
-      params.firstName || params.lastName || params.secondName;
     // const color = colors[Numbers.getRandomInt(0, colors.length - 1)];
     // const animal = animals[Numbers.getRandomInt(0, animals.length - 1)];
-
-    const displayName = hasPersonalInfo
-      ? [params.firstName, params.secondName, params.lastName]
-          .filter((x) => x)
-          .join(' ')
-      : 'Guest';
 
     // if (!params.avatarId) {
     //   params.avatarId = await this.avatarService
@@ -34,6 +26,110 @@ export class LeadMutationService {
     //     .then((x) => x.id);
     // }
 
+    const tags = this.tagsToConnect(params);
+
+    const data: Prisma.LeadCreateInput = {
+      seen: true,
+      budget: params.budget,
+      // itemType: ItemType.property,
+      // sourceDetails: params.sourceDetails,
+      ...(tags.length > 0 ? { tags: { connect: tags } } : {}),
+      status: { connect: { id: CoreEnums.LeadStatusIndex.new } },
+      person: {
+        create: {
+          displayName: this.getDisplayName(params),
+          firstName: params.firstName,
+          secondName: params.secondName,
+          lastName: params.lastName,
+          birthDate: params.birthDate,
+          // avatar: { connect: { id: params.avatarId } },
+        },
+      },
+    };
+
+    const lead = await this.prisma.lead.create({
+      data,
+      include: {
+        person: true,
+        status: true,
+        tags: {
+          include: {
+            category: true,
+            city: true,
+            country: true,
+            language: true,
+            nationality: true,
+          },
+        },
+      },
+    });
+
+    return lead;
+  }
+
+  async updateLead({ params }: UpdateLeadArgs) {
+    const lead = await this.prisma.lead.findUnique({
+      where: { id: params.leadId },
+    });
+
+    const tags = this.tagsToConnect(params);
+
+    return this.prisma.lead.update({
+      where: {
+        id: params.leadId,
+      },
+      include: {
+        person: true,
+        status: true,
+        tags: {
+          include: {
+            category: true,
+            city: true,
+            country: true,
+            language: true,
+            nationality: true,
+          },
+        },
+      },
+      data: {
+        budget: params.budget,
+        ...(tags.length > 0 ? { tags: { connect: tags } } : {}),
+        person: {
+          update: {
+            birthDate: params.birthDate,
+            displayName: this.getDisplayName(params),
+            firstName: params.firstName,
+            lastName: params.lastName,
+            secondName: params.secondName,
+          },
+        },
+        status: {
+          connect: {
+            id: params.statusId,
+          },
+        },
+      },
+    });
+  }
+
+  private getDisplayName({
+    firstName,
+    lastName,
+    secondName,
+  }: {
+    firstName?: string;
+    lastName?: string;
+    secondName?: string;
+  }) {
+    const hasPersonalInfo = firstName || lastName || secondName;
+
+    const displayName = hasPersonalInfo
+      ? [firstName, secondName, lastName].filter((x) => x).join(' ')
+      : 'Guest';
+    return displayName;
+  }
+
+  private tagsToConnect(params: any) {
     const tags: Prisma.TagWhereUniqueInput[] = [];
 
     // if (params.propertyTypeId) tags.push({ propertyTypeId: params.propertyTypeId });
@@ -55,38 +151,6 @@ export class LeadMutationService {
       tags.push(...params.languageIds.map((x) => ({ languageId: x })));
     // if (params.projectIds) tags.push(...params.projectIds.map((x) => ({ projectId: x })));
 
-    const data: Prisma.LeadCreateInput = {
-      seen: true,
-      budget: params.budget,
-      // itemType: ItemType.property,
-      // sourceDetails: params.sourceDetails,
-      ...(tags.length > 0 ? { tags: { connect: tags } } : {}),
-      status: { connect: { id: CoreEnums.LeadStatusIndex.new } },
-      person: {
-        create: {
-          displayName,
-          firstName: params.firstName,
-          secondName: params.secondName,
-          lastName: params.lastName,
-          birthDate: params.birthDate,
-          // avatar: { connect: { id: params.avatarId } },
-        },
-      },
-    };
-
-    const lead = await this.prisma.lead.create({ data });
-
-    return lead;
-  }
-
-  updateLead(args: UpdateLeadArgs) {
-    const { leadId: id, ...data } = args.params;
-
-    // return this.prisma.lead.update({
-    //   where: {
-    //     id,
-    //   },
-    //   data,
-    // });
+    return tags;
   }
 }
