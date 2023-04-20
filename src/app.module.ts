@@ -5,6 +5,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { PrismaModule } from 'src/modules/prisma/prisma.module';
 import { ModelResolversModule } from '@common/resolvers';
+import { GeneralModule } from 'src/modules/general/general.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ModelResolversModule } from '@common/resolvers';
       sortSchema: true,
       introspection: true,
     }),
+    GeneralModule,
     LeadModule,
     ModelResolversModule,
   ],

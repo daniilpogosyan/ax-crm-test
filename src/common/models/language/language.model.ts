@@ -12,6 +12,6 @@ export class LanguageModel {
   @Field(() => String)
   shortCode!: string;
 
-  @Field(() => [CountryModel], { nullable: true })
-  countries?: Array<CountryModel>;
+  // @Field(() => [CountryModel], { nullable: true })
+  // countries?: Array<CountryModel>;
 }

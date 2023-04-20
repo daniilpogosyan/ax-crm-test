@@ -26,7 +26,7 @@ export class LeadMutationService {
     //     .then((x) => x.id);
     // }
 
-    const tags = this.tagsToConnect(params);
+    const tags = this.tagsToUpdateRelation(params);
 
     const data: Prisma.LeadCreateInput = {
       seen: true,
@@ -60,7 +60,27 @@ export class LeadMutationService {
   }
 
   async updateLead({ params }: UpdateLeadArgs) {
-    const tags = this.tagsToConnect(params);
+    const leadTagsBeforeUpdate = await this.prisma.tag.findMany({
+      where: {
+        leadId: params.leadId,
+      },
+    });
+
+    const tagIdsInParams = Object.fromEntries(
+      Object.entries(params).filter(([key, value]) => key.endsWith('Id')),
+    );
+
+    const tagIdsExisting = leadTagsBeforeUpdate.map((tag) => {
+      const tagNameId = Object.entries(params).filter(([key, value]) =>
+        key.endsWith('Id'),
+      );
+    });
+
+    const tagsToConnect = this.tagsToUpdateRelation(params);
+
+    const tagsToDisonnect = this.tagsToUpdateRelation(tagIdsInParams);
+
+    leadTagsBeforeUpdate.filter((tag) => tag);
 
     const nameUpdated = Boolean(
       params.firstName || params.lastName || params.secondName,
@@ -76,7 +96,9 @@ export class LeadMutationService {
       },
       data: {
         budget: params.budget,
-        ...(tags.length > 0 ? { tags: { connect: tags } } : {}),
+        ...(tagsToConnect.length > 0
+          ? { tags: { connect: tagsToConnect } }
+          : {}),
         person: {
           update: {
             birthDate: params.birthDate,
@@ -118,7 +140,7 @@ export class LeadMutationService {
     return displayName;
   }
 
-  private tagsToConnect(params: any) {
+  private tagsToUpdateRelation(params: any) {
     const tags: Prisma.TagWhereUniqueInput[] = [];
 
     // if (params.propertyTypeId) tags.push({ propertyTypeId: params.propertyTypeId });

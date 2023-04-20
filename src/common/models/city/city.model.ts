@@ -9,8 +9,8 @@ export class CityModel {
   @Field(() => String)
   title!: string;
 
-  @Field(() => CountryModel)
-  country!: CountryModel;
+  // @Field(() => CountryModel)
+  // country!: CountryModel;
 
   @Field(() => Int)
   countryId!: number;
