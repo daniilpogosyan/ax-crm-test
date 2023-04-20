@@ -18,6 +18,33 @@ registerEnumType(LeadType, {
 });
 
 @ObjectType()
+export class LeadStatusModel {
+  @Field(() => Int)
+  id!: number;
+
+  @Field(() => String)
+  title!: string;
+
+  @Field(() => String)
+  color!: string;
+
+  @Field(() => String)
+  backgroundColor!: string;
+
+  @Field(() => Int)
+  step!: number;
+
+  @Field(() => Int)
+  stepsCount!: number;
+
+  @Field(() => Date)
+  createdAt!: Date;
+
+  @Field(() => Date)
+  updatedAt!: Date;
+}
+
+@ObjectType()
 export class LeadModel {
   @Field(() => Int)
   id!: number;
@@ -57,6 +84,9 @@ export class LeadModel {
 
   // @Field(() => [AdTagModel], { nullable: true })
   // adTags: AdTagModel[];
+
+  @Field(() => LeadStatusModel, { nullable: true })
+  status: LeadStatusModel;
 
   @Field(() => Date, { nullable: true })
   createdAt: Date;

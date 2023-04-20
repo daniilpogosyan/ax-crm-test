@@ -60,13 +60,12 @@ export class LeadMutationService {
   }
 
   async updateLead({ params }: UpdateLeadArgs) {
-    const lead = await this.prisma.lead.findUnique({
-      where: { id: params.leadId },
-    });
-
     const tags = this.tagsToConnect(params);
 
-    return this.prisma.lead.update({
+    const nameUpdated = Boolean(
+      params.firstName || params.lastName || params.secondName,
+    );
+    const lead = await this.prisma.lead.update({
       where: {
         id: params.leadId,
       },
@@ -81,19 +80,25 @@ export class LeadMutationService {
         person: {
           update: {
             birthDate: params.birthDate,
-            displayName: this.getDisplayName(params),
+            displayName: nameUpdated ? this.getDisplayName(params) : undefined,
             firstName: params.firstName,
             lastName: params.lastName,
             secondName: params.secondName,
           },
         },
-        status: {
-          connect: {
-            id: params.statusId,
-          },
-        },
+        ...(params.statusId
+          ? {
+              status: {
+                connect: {
+                  id: params.statusId,
+                },
+              },
+            }
+          : {}),
       },
     });
+
+    return lead;
   }
 
   private getDisplayName({

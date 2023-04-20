@@ -3,12 +3,14 @@ import {
   CountryModel,
   LanguageModel,
   LeadModel,
+  LeadStatusModel,
   NationalityModel,
 } from '@common/models';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { Int, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { Lead, Tag } from '@prisma/client';
 import { Inject } from '@nestjs/common';
+import * as CoreEnums from '@common/core';
 
 @Resolver(() => LeadModel)
 export class LeadModelResolver {
@@ -48,5 +50,13 @@ export class LeadModelResolver {
         id: lead.tags.find((tag) => tag.nationalityId).nationalityId,
       },
     });
+  }
+}
+
+@Resolver(() => LeadStatusModel)
+export class LeadStatusResolver {
+  @ResolveField(() => Int)
+  stepsCount() {
+    return Object.keys(CoreEnums.LeadStatusIndex).length / 2;
   }
 }
