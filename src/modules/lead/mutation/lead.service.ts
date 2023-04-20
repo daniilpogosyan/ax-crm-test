@@ -52,15 +52,7 @@ export class LeadMutationService {
       include: {
         person: true,
         status: true,
-        tags: {
-          include: {
-            category: true,
-            city: true,
-            country: true,
-            language: true,
-            nationality: true,
-          },
-        },
+        tags: true,
       },
     });
 
@@ -81,15 +73,7 @@ export class LeadMutationService {
       include: {
         person: true,
         status: true,
-        tags: {
-          include: {
-            category: true,
-            city: true,
-            country: true,
-            language: true,
-            nationality: true,
-          },
-        },
+        tags: true,
       },
       data: {
         budget: params.budget,

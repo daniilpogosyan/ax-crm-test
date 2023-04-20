@@ -1,3 +1,4 @@
+import { PersonModel } from '@common/models/person/person.model';
 import {
   Field,
   Float,
@@ -21,26 +22,14 @@ export class LeadModel {
   @Field(() => Int)
   id!: number;
 
-  @Field(() => String, { nullable: true })
-  displayName: string;
-
-  @Field(() => String, { nullable: true })
-  firstName?: string;
-
-  @Field(() => String, { nullable: true })
-  lastName?: string;
-
-  @Field(() => Date, { nullable: true })
-  birthDate?: Date;
-
-  @Field(() => Int, { nullable: true })
-  quality: number;
+  @Field(() => PersonModel)
+  person: PersonModel;
 
   @Field(() => Float, { nullable: true })
   budget: number;
 
-  @Field(() => String, { nullable: true })
-  sourceDetails: string;
+  // @Field(() => String, { nullable: true })
+  // sourceDetails: string;
 
   // @Field(() => PropertyTypeModel, { nullable: true })
   // propertyType: PropertyTypeModel;
@@ -48,17 +37,17 @@ export class LeadModel {
   // @Field(() => FileModel, { nullable: true })
   // avatar: FileMode;
 
-  // @Field(() => CityModel, { nullable: true })
-  // city: CityModel;
+  @Field(() => CityModel, { nullable: true })
+  city: CityModel;
 
-  // @Field(() => CountryModel, { nullable: true })
-  // country: CountryModel;
+  @Field(() => CountryModel, { nullable: true })
+  country: CountryModel;
 
-  // @Field(() => [LanguageModel], { nullable: true })
-  // languages: LanguageModel[];
+  @Field(() => [LanguageModel], { nullable: true })
+  languages: LanguageModel[];
 
-  // @Field(() => NationalityModel, { nullable: true })
-  // nationality: NationalityModel;
+  @Field(() => NationalityModel, { nullable: true })
+  nationality: NationalityModel;
 
   // @Field(() => LeadIntentionModel, { nullable: true })
   // intention: LeadIntentionModel;

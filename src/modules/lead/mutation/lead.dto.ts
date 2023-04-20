@@ -74,9 +74,6 @@ export class UpdateLeadInput extends PartialType(CreateLeadInput) {
   @Field(() => String, { nullable: true })
   statusReason?: string;
 
-  @Field(() => Boolean, { nullable: true })
-  seenn?: boolean;
-
   @Field(() => Int, { nullable: true })
   responsibleAgentId?: number;
 }

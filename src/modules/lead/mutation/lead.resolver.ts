@@ -17,6 +17,6 @@ export class LeadMutationResolver {
 
   @Mutation(() => LeadModel)
   updateLead(@Args() args: UpdateLeadArgs) {
-    return this.leadService.createLead(args);
+    return this.leadService.updateLead(args);
   }
 }

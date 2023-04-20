@@ -4,6 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { PrismaModule } from 'src/modules/prisma/prisma.module';
+import { ModelResolversModule } from '@common/resolvers';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PrismaModule } from 'src/modules/prisma/prisma.module';
       introspection: true,
     }),
     LeadModule,
+    ModelResolversModule,
   ],
 })
 export class AppModule {}

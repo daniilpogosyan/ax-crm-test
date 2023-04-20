@@ -16,15 +16,7 @@ export class LeadQueryService {
       include: {
         person: true,
         status: true,
-        tags: {
-          include: {
-            category: true,
-            city: true,
-            country: true,
-            language: true,
-            nationality: true,
-          },
-        },
+        tags: true,
       },
     });
   }
@@ -37,15 +29,7 @@ export class LeadQueryService {
         include: {
           person: true,
           status: true,
-          tags: {
-            include: {
-              category: true,
-              city: true,
-              country: true,
-              language: true,
-              nationality: true,
-            },
-          },
+          tags: true,
         },
       },
       'id',
