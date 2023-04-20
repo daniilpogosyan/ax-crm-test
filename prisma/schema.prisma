@@ -125,7 +125,7 @@ model Tag {
   languageId    Int?         @unique
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
-  Lead          Lead?        @relation(fields: [leadId], references: [id])
+  Lead          Lead[]
   leadId        Int?
 }
 

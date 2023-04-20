@@ -15,22 +15,31 @@ import * as CoreEnums from '@common/core';
 @Resolver(() => LeadModel)
 export class LeadModelResolver {
   constructor(@Inject(PrismaService) private prisma: PrismaService) {}
+
   @ResolveField(() => CityModel)
   city(@Parent() lead: Lead & { tags: Tag[] }) {
+    const id = lead.tags.find((tag) => tag.cityId)?.cityId;
+    if (!id) return;
+
     return this.prisma.city.findUnique({
       where: {
-        id: lead.tags.find((tag) => tag.cityId).cityId,
+        id,
       },
     });
   }
+
   @ResolveField(() => CountryModel)
   country(@Parent() lead: Lead & { tags: Tag[] }) {
+    const id = lead.tags.find((tag) => tag.countryId)?.countryId;
+    if (!id) return;
+
     return this.prisma.city.findUnique({
       where: {
-        id: lead.tags.find((tag) => tag.cityId).cityId,
+        id,
       },
     });
   }
+
   @ResolveField(() => [LanguageModel])
   languages(@Parent() lead: Lead & { tags: Tag[] }) {
     return this.prisma.language.findMany({
@@ -43,11 +52,15 @@ export class LeadModelResolver {
       },
     });
   }
+
   @ResolveField(() => NationalityModel)
   nationality(@Parent() lead: Lead & { tags: Tag[] }) {
+    const id = lead.tags.find((tag) => tag.nationalityId)?.nationalityId;
+    if (!id) return;
+
     return this.prisma.nationality.findUnique({
       where: {
-        id: lead.tags.find((tag) => tag.nationalityId).nationalityId,
+        id,
       },
     });
   }

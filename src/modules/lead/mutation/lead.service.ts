@@ -66,21 +66,21 @@ export class LeadMutationService {
       },
     });
 
-    const tagIdsInParams = Object.fromEntries(
+    const newTagParams = Object.fromEntries(
       Object.entries(params).filter(([key, value]) => key.endsWith('Id')),
     );
 
-    const tagIdsExisting = leadTagsBeforeUpdate.map((tag) => {
-      const tagNameId = Object.entries(params).filter(([key, value]) =>
-        key.endsWith('Id'),
-      );
-    });
+    const multipleValueTags = ['language'];
+    const removedTagParams = leadTagsBeforeUpdate.reduce((acc, cur) => {
+      const tagName = cur.type.toLowerCase();
+      if (multipleValueTags.includes(tagName)) {
+        acc[tagName + 'Ids'] = acc[tagName + 'Ids'] ?? [];
+        acc[tagName + 'Ids'].push(cur[tagName + 'Id']);
+        return acc;
+      }
 
-    const tagsToConnect = this.tagsToUpdateRelation(params);
-
-    const tagsToDisonnect = this.tagsToUpdateRelation(tagIdsInParams);
-
-    leadTagsBeforeUpdate.filter((tag) => tag);
+      return { ...acc, tagName: cur[tagName + `Id`] };
+    }, {});
 
     const nameUpdated = Boolean(
       params.firstName || params.lastName || params.secondName,
@@ -96,9 +96,12 @@ export class LeadMutationService {
       },
       data: {
         budget: params.budget,
-        ...(tagsToConnect.length > 0
-          ? { tags: { connect: tagsToConnect } }
-          : {}),
+        ...{
+          tags: {
+            connect: this.tagsToUpdateRelation(newTagParams),
+            disconnect: this.tagsToUpdateRelation(removedTagParams),
+          },
+        },
         person: {
           update: {
             birthDate: params.birthDate,
@@ -120,6 +123,7 @@ export class LeadMutationService {
       },
     });
 
+    console.log(`L126`, lead);
     return lead;
   }
 
