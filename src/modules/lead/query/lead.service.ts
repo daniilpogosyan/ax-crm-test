@@ -13,6 +13,19 @@ export class LeadQueryService {
       where: {
         id: params.id,
       },
+      include: {
+        person: true,
+        status: true,
+        tags: {
+          include: {
+            category: true,
+            city: true,
+            country: true,
+            language: true,
+            nationality: true,
+          },
+        },
+      },
     });
   }
 
@@ -20,7 +33,21 @@ export class LeadQueryService {
     return paginatedResponse(
       this.prisma,
       this.prisma.lead,
-      {},
+      {
+        include: {
+          person: true,
+          status: true,
+          tags: {
+            include: {
+              category: true,
+              city: true,
+              country: true,
+              language: true,
+              nationality: true,
+            },
+          },
+        },
+      },
       'id',
       pagination,
     );
