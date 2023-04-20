@@ -60,26 +60,34 @@ export class LeadMutationService {
   }
 
   async updateLead({ params }: UpdateLeadArgs) {
-    const leadTagsBeforeUpdate = await this.prisma.tag.findMany({
+    const leadBeforeUpdate = await this.prisma.lead.findUnique({
+      include: {
+        tags: true,
+      },
       where: {
-        leadId: params.leadId,
+        id: params.leadId,
       },
     });
 
-    const newTagParams = Object.fromEntries(
-      Object.entries(params).filter(([key, value]) => key.endsWith('Id')),
-    );
+    const leadTagsBeforeUpdate = leadBeforeUpdate.tags;
 
     const multipleValueTags = ['language'];
+
     const removedTagParams = leadTagsBeforeUpdate.reduce((acc, cur) => {
       const tagName = cur.type.toLowerCase();
+      const tagNameIds = tagName + 'Ids'; // used if multiple values
+      const tagNameId = tagName + 'Id'; // used if single value
+
+      if (params[tagNameId] === cur[tagNameId]) return acc;
+
       if (multipleValueTags.includes(tagName)) {
-        acc[tagName + 'Ids'] = acc[tagName + 'Ids'] ?? [];
-        acc[tagName + 'Ids'].push(cur[tagName + 'Id']);
+        if (params[tagNameIds].includes(cur[tagNameId])) return acc;
+        acc[tagNameIds] = acc[tagNameIds] ?? [];
+        acc[tagNameIds].push(cur[tagNameId]);
         return acc;
       }
 
-      return { ...acc, tagName: cur[tagName + `Id`] };
+      return { ...acc, tagName: cur[tagNameId] };
     }, {});
 
     const nameUpdated = Boolean(
@@ -98,7 +106,7 @@ export class LeadMutationService {
         budget: params.budget,
         ...{
           tags: {
-            connect: this.tagsToUpdateRelation(newTagParams),
+            connect: this.tagsToUpdateRelation(params),
             disconnect: this.tagsToUpdateRelation(removedTagParams),
           },
         },
@@ -123,7 +131,6 @@ export class LeadMutationService {
       },
     });
 
-    console.log(`L126`, lead);
     return lead;
   }
 
