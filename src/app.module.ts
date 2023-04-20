@@ -13,6 +13,7 @@ import { PrismaModule } from 'src/modules/prisma/prisma.module';
       playground: true,
       autoSchemaFile: true,
       sortSchema: true,
+      introspection: true,
     }),
     LeadModule,
   ],
